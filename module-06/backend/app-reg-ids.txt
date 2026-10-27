@@ -1,0 +1,17 @@
+
+App Registration-en i dette faget er allerede opprettet. (Gå til Microsoft Entra ID → App registrations. Velg 
+fanen Owned applications (ikke All applications). Den viser bare appene den påloggede brukeren eier – i dette 
+faget vil det si én.)
+
+Application (client) ID:    9ba0e2b9-e8d1-45f4-a601-a75f0d0ca910
+
+Directory (tenant) ID:      6980af2f-acfc-4513-ac50-552bcfdb01a0
+
+
+Det er service principal-ens object-ID som skal inn i var.pipeline_principal_id i bootstrap-stacken. 
+Den hentes med Azure CLI, innlogget mot fagets tenant:
+ss@ubuserv:~/iac-course/module-06/backend$ az ad sp list --spn "9ba0e2b9-e8d1-45f4-a601-a75f0d0ca910" 
+--query "[].id" --output tsv
+(7. okt: 
+39cdd9ab-1754-4571-a828-e4e628620b32
+returnert. Dett er object-IDen til service principal-en – en GUID)

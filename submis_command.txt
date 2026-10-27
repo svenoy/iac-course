@@ -1,0 +1,18 @@
+find . -type f  -name "*.tf" -o -name "*.tfvars"  | while read -r f; do
+    printf "### %s\n\`\`\`terraform\n" "$f" >> submission.md
+    cat "$f" >> submission.md
+    printf "\n\`\`\`\n\n" >> submission.md
+done
+// (recursive (subfolders, e.g. in module-05))
+
+
+
+// OLD:
+> submission.md
+for f in *.tf *.tfvars; do
+  if [ -f "$f" ]; then
+    printf "### %s\n\`\`\`terraform\n" "$f" >> submission.md
+    cat "$f" >> submission.md
+    printf "\n\`\`\`\n\n" >> submission.md
+  fi
+done
