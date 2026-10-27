@@ -1,0 +1,26 @@
+# Læringssti oppgave
+# PART A
+
+cd ~/iac-course/module-07
+
+(terraform init -backend=false)
+
+# Generate multi-platform provider hashes
+terraform providers lock \
+  -platform=linux_amd64 \
+  -platform=darwin_arm64 \
+  -platform=windows_amd64
+
+((cd ~/iac-course))
+# Force Git to track the file (bypassing any .gitignore rules)
+((git add module-07/.terraform.lock.hcl))
+git add .terraform.lock.hcl
+
+# Commit and push to GitHub
+git commit -m "Fix module path and lock provider version (for the pipeline)"
+git push origin main
+#--------------------------------------
+
+az ad app federated-credential list \
+    --id "9ba0e2b9-e8d1-45f4-a601-a75f0d0ca910" \
+    --query "[].{navn:name, subject:subject}" --output table
