@@ -1,0 +1,48 @@
+name: terraform-module-07
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'module-07/**'
+      - '.github/workflows/terraform-module-07.yml'
+    # Workflow will run on pull requests to main branch, IF the changes are in the module-07 
+    # folder or the workflow file itself.
+    # It is a filter that tells GitHub to only run this pipeline if files inside this folder
+    # are changed. If we edit a file outside this folder, the pipeline ignores it.
+    # If we edit the workflow file itself to add new jobs later, but forget to include 
+    # the workflow file in the trigger list, GitHub will not run the pipeline to test your new changes.
+  push:
+    branches: [main]
+    paths:
+      - 'module-07/**'
+      - '.github/workflows/terraform-module-07.yml'
+    # See comments above. (This is the same filter, but for pushes (to main branch). Both triggers are necessay, 
+    # because we want to test changes in PRs AND we merge them into main branch.)
+
+permissions:
+  id-token: write             # OIDC trust with Azure (from module 6)
+  contents: read
+  pull-requests: write        # Allows GitHub to post comments in the PR later
+
+defaults:
+  run:
+    working-directory: module-07     # This is where the Terraform root is located
+# Tells GitHub server to cd into module-07 folder before running Terraform commands. 
+# Thus, everything works exactly like on the local computer.
+
+env:
+  ARM_USE_OIDC:        "true"
+  ARM_CLIENT_ID:       ${{ vars.AZURE_CLIENT_ID }}
+  ARM_TENANT_ID:       ${{ vars.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform fmt -check -recursive
+      - run: terraform init -backend=false
+      - run: terraform validate
