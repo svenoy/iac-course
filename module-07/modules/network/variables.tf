@@ -7,17 +7,17 @@
 # This file declares or reflects expected inputs from caller i.e. the root module (through variables).
 
 
-variable "location"            { type = string }
+variable "location" { type = string }
 
-variable "resource_group_name" { 
+variable "resource_group_name" {
   description = "RG will typically be created in the root (parent) module"
-  type = string 
+  type        = string
 }
 
-variable "student_id" { 
-  type = string 
+variable "student_id" {
+  type = string
 }
 
-variable "project_name" { 
-  type = string 
+variable "project_name" {
+  type = string
 }

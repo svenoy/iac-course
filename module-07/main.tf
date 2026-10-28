@@ -16,7 +16,7 @@ resource "azurerm_resource_group" "main" { # The RG was added here in Module 6 (
 }
 
 module "network" {
-  source       = "../modules/network"
+  source       = "./modules/network"
   student_id   = var.student_id
   project_name = var.project_name
   # location            = var.location
