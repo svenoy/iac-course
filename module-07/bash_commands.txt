@@ -1,4 +1,15 @@
 # Læringssti oppgave
+
+# tree command combined with Git to see a visual (project) map that only includes tracked files:
+ss@ubuserv:~/iac-course$ git ls-files | tree --fromfile
+
+# If a file has unsaved changes that conflict with the branch we want to switch to, Git blocks 
+# the switch to prevent overwriting our work. To discard these local changes completely and allow 
+# the switch/pull (so relevant before the commands git switch main and git pull):
+git restore module-07/some_file.txt
+
+
+
 # PART A
 
 cd ~/iac-course/module-07
