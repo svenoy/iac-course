@@ -37,6 +37,10 @@ env:
   ARM_TENANT_ID:       ${{ vars.AZURE_TENANT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
+concurrency:
+  group: terraform-module-07-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -96,3 +100,22 @@ jobs:
             -backend-config="key=module-07/dev/network.tfstate"
             
       - run: terraform apply -auto-approve -var-file="dev.tfvars"
+
+  apply-prod:
+    needs: apply-dev
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Azure/login@v3.1.0
+        with:
+          client-id:       ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id:       ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - uses: hashicorp/setup-terraform@v3
+      - run: |
+          terraform init \
+            -backend-config=backend.hcl \
+            -backend-config="key=module-07/prod/network.tfstate"
+      - run: terraform apply -auto-approve -var-file="prod.tfvars"
