@@ -1,0 +1,37 @@
+# Læringssti oppgave
+
+# tree command combined with Git to see a visual (project) map that only includes tracked files:
+ss@ubuserv:~/iac-course$ git ls-files | tree --fromfile
+
+# If a file has unsaved changes that conflict with the branch we want to switch to, Git blocks 
+# the switch to prevent overwriting our work. To discard these local changes completely and allow 
+# the switch/pull (so relevant before the commands git switch main and git pull):
+git restore module-07/some_file.txt
+
+
+
+# PART A
+
+cd ~/iac-course/module-07
+
+(terraform init -backend=false)
+
+# Generate multi-platform provider hashes
+terraform providers lock \
+  -platform=linux_amd64 \
+  -platform=darwin_arm64 \
+  -platform=windows_amd64
+
+((cd ~/iac-course))
+# Force Git to track the file (bypassing any .gitignore rules)
+((git add module-07/.terraform.lock.hcl))
+git add .terraform.lock.hcl
+
+# Commit and push to GitHub
+git commit -m "Fix module path and lock provider version (for the pipeline)"
+git push origin main
+#--------------------------------------
+
+az ad app federated-credential list \
+    --id "9ba0e2b9-e8d1-45f4-a601-a75f0d0ca910" \
+    --query "[].{navn:name, subject:subject}" --output table
