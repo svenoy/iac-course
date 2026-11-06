@@ -21,3 +21,11 @@ resource "azurerm_subnet" "this" {
   virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = ["10.0.1.0/24"]
 }
+
+# Added in step 5 of Module 8. (Subnet might be needed for a database server, possibly added later.)
+resource "azurerm_subnet" "data" {
+  name                 = "${local.name_prefix}-data-subnet"
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.this.name
+  address_prefixes     = ["10.0.2.0/24"]
+}
