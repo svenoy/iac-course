@@ -1,0 +1,51 @@
+name: deploy-module-08
+
+on:
+  push:
+    tags: ['module8-v*']    # bare module8-taggene starter en utrulling
+
+permissions:
+  id-token: write          # OIDC mot Azure (modul 6)
+  contents: read
+
+concurrency:
+  group: deploy-module8     # én utrulling av gangen mot module8-"staten"
+  cancel-in-progress: false
+
+defaults:
+  run:
+    working-directory: module-08    # her bor Terraform-rota
+
+env:
+  ARM_USE_OIDC:        "true"
+  ARM_CLIENT_ID:       ${{ vars.AZURE_CLIENT_ID }}
+  ARM_TENANT_ID:       ${{ vars.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+jobs:
+  build:                   # kvalitetsporten fra modul 7 – før noe rulles ut
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform fmt -check -recursive
+      - run: terraform init -backend=false
+      - run: terraform validate
+
+  deploy-dev:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4          # samme tagget kode for ALLE miljøer
+      - uses: Azure/login@v3.1.0
+        with:
+          client-id:       ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id:       ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - uses: hashicorp/setup-terraform@v3
+      - run: |
+          terraform init \
+            -backend-config=backend.hcl \
+            -backend-config="key=module-08/dev/network.tfstate"
+      - run: terraform apply -auto-approve -var-file="dev.tfvars"
