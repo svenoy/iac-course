@@ -2,7 +2,7 @@ name: deploy-module-08
 
 on:
   push:
-    tags: ['module8-v*']    # bare module8-taggene starter en utrulling
+    tags: ['module-08-v*']    # bare module-08-taggene starter en utrulling
 
 permissions:
   id-token: write          # OIDC mot Azure (modul 6)
