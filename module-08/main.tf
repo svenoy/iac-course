@@ -18,17 +18,10 @@ resource "azurerm_resource_group" "main" { # The RG was added here in Module 6 (
 }
 
 module "network" {
-  source = "git::https://github.com/svenoy/iac-course.git//modules/network?ref=network-v1.0.0"
+  source = "git::https://github.com/svenoy/iac-course.git//modules/network?ref=network-v1.1.0"
   # Adjusted source for Module 8.
   project_name        = var.project_name
   student_id          = var.student_id
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 }
-
-# resource "random_password" "demo" {
-#   length  = 24
-#   special = true
-# }
-# This resource was a late addition. (random_password is from a new provider, so
-# terraform init must be rerun, in the environment(s) / ultimate root folder(s)).
