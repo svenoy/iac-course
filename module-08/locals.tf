@@ -5,9 +5,9 @@ locals {
   resource_group_name = "${local.name_prefix}-rg"
 
   common_tags = {
-    owner      = var.student_id
-    course     = "iac"
-    module     = "module-08"
+    owner  = var.student_id
+    course = "iac"
+    module = "module-08"
     #managed_by = "pipeline"
   }
 }
