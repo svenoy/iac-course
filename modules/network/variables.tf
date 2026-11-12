@@ -19,5 +19,19 @@ variable "student_id" {
 }
 
 variable "project_name" {
-  type = string
+  type        = string
+  description = "Name of the project component."
+
+  validation {
+    condition     = can(regex("^[a-z0-9-]{3,20}$", var.project_name))
+    error_message = "project_name can only contain lowercase letters, numbers, and hyphens (3–20 characters)."
+  }
+}
+
+# Added in part F of Module 9, to prevent insecure NSG rules. Default is "VirtualNetwork" to allow 
+# SSH from other resources in the same VNet.
+variable "ssh_source_prefix" {
+  type        = string
+  description = "Where SSH (port 22) is allowed from. Never use \"*\"."
+  default     = "VirtualNetwork" # Azure's tag for traffic from the same virtual network.
 }
