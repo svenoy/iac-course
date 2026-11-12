@@ -44,7 +44,7 @@ resource "azurerm_network_security_group" "this" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = var.ssh_source_prefix # Never use "*" for this variable; use "VirtualNetwork" or a specific IP range.
+    source_address_prefix      = "*" # (var.ssh_source_prefix) Never use "*" for this variable; use "VirtualNetwork" or a specific IP range.
     destination_address_prefix = "*"
   }
 }
