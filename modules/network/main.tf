@@ -15,11 +15,16 @@ resource "azurerm_virtual_network" "this" {
   resource_group_name = var.resource_group_name
 }
 
-resource "azurerm_subnet" "this" {
+resource "azurerm_subnet" "app" { # Previously named "this" (changed in M-10, part 1). The name "this" can cause confusion when multiple subnets exist in the same module.
   name                 = "${local.name_prefix}-subnet"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = ["10.0.1.0/24"]
+}
+
+moved {
+  from = azurerm_subnet.this
+  to   = azurerm_subnet.app
 }
 
 # Added in step 5 of Module 8. (Subnet might be needed e.g. for a database server, later.)
@@ -50,6 +55,6 @@ resource "azurerm_network_security_group" "this" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "this" {
-  subnet_id                 = azurerm_subnet.this.id
+  subnet_id                 = azurerm_subnet.app.id # Previously "this" (changed in M-10, part 1).
   network_security_group_id = azurerm_network_security_group.this.id
 }
