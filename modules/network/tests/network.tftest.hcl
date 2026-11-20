@@ -11,7 +11,7 @@ run "subnets_have_correct_cidr" {
   command = plan
 
   assert {
-    condition     = azurerm_subnet.this.address_prefixes[0] == "10.0.1.0/24"
+    condition     = azurerm_subnet.app.address_prefixes[0] == "10.0.1.0/24" # Previously "this" (changed in M-10, part 1).
     error_message = "The main subnet must have CIDR 10.0.1.0/24."
   }
 
